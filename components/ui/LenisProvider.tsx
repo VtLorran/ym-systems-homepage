@@ -9,15 +9,17 @@ interface LenisProviderProps {
 
 export default function LenisProvider({ children }: LenisProviderProps) {
   useEffect(() => {
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
+
     // Initialize Lenis
     const lenis = new Lenis({
-      duration: 1.8, // Increased duration for smoother, more elegant scrolling transitions
+      duration: isMobile ? 1.2 : 1.8, // Slightly faster response on mobile
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // smooth scroll curve
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 0.8, // Slightly reduced multiplier to make scroll feel a bit slower and controlled
-      touchMultiplier: 1.2,
+      wheelMultiplier: isMobile ? 1.0 : 0.8,
+      touchMultiplier: isMobile ? 1.5 : 1.2,
     });
 
     // Custom animation frame loop for Lenis

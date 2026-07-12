@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { easeCustom, staggerContainer } from '../../lib/motion';
@@ -12,7 +12,12 @@ interface FAQItem {
 }
 
 function FAQAccordion({ question, answer, isOpen, onToggle }: FAQItem & { isOpen: boolean; onToggle: () => void }) {
+  const [isMobile, setIsMobile] = useState(false);
   const answerWords = answer.split(' ');
+
+  useEffect(() => {
+    setIsMobile(window.matchMedia('(max-width: 1024px)').matches);
+  }, []);
 
   return (
     <div className="border-b border-white/5 last:border-0 py-4.5">
@@ -50,8 +55,8 @@ function FAQAccordion({ question, answer, isOpen, onToggle }: FAQItem & { isOpen
                   <motion.span
                     key={i}
                     variants={{
-                      hidden: { opacity: 0.15, filter: 'blur(2px)', y: 3 },
-                      visible: { opacity: 1, filter: 'blur(0px)', y: 0 }
+                      hidden: { opacity: 0.15, filter: isMobile ? 'none' : 'blur(2px)', y: 3 },
+                      visible: { opacity: 1, filter: isMobile ? 'none' : 'blur(0px)', y: 0 }
                     }}
                     transition={{ duration: 0.3 }}
                     className="inline-block mr-1"

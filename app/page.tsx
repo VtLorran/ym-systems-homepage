@@ -28,6 +28,20 @@ export default function Home() {
     // Register GSAP ScrollTrigger plugin on client mount
     gsap.registerPlugin(ScrollTrigger);
 
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
+
+    // Apply mobile-specific ScrollTrigger optimizations to prevent layout shifts
+    // caused by address bar hide/show, and normalize scrolling for hardware acceleration.
+    ScrollTrigger.config({
+      ignoreMobileResize: true,
+    });
+
+    if (isMobile) {
+      ScrollTrigger.normalizeScroll({
+        allowNestedScroll: true,
+      });
+    }
+
     // Initial position setups for animated layers to prevent layout shifts & Tailwind conflicts
     gsap.set('.hero-ticker-curtain', { yPercent: 100 });
     gsap.set('.billboard-swipe-bg', { yPercent: 100, opacity: 0 });
@@ -267,6 +281,7 @@ export default function Home() {
     // Cleanup triggers on component unmount
     return () => {
       ScrollTrigger.getAll().forEach(t => t.kill());
+      ScrollTrigger.normalizeScroll(false);
       window.removeEventListener('load', handleLoad);
       clearTimeout(timer);
     };

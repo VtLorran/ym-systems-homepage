@@ -107,6 +107,23 @@ export default function Tecnologias() {
     mouseY.set(0);
   };
 
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!containerRef.current || e.touches.length === 0) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const touch = e.touches[0];
+    const width = rect.width;
+    const height = rect.height;
+    const x = touch.clientX - rect.left - width / 2;
+    const y = touch.clientY - rect.top - height / 2;
+    mouseX.set(x);
+    mouseY.set(y);
+  };
+
+  const handleTouchEnd = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+  };
+
   // Technologies aligned on a 12 columns x 4 rows grid (Bug 6)
   const technologies: TechItem[] = [
     // Layer 1 - Deep Background
@@ -135,6 +152,8 @@ export default function Tecnologias() {
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
       className="relative py-24 md:py-32 bg-bg-base border-t border-white/5 overflow-hidden"
     >
       {/* Background spotlights */}

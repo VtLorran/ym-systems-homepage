@@ -7,6 +7,7 @@ import { Menu, X, Terminal } from 'lucide-react';
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Top reading progress bar setup
   const { scrollYProgress } = useScroll();
@@ -17,6 +18,8 @@ export default function Navbar() {
   });
 
   useEffect(() => {
+    setIsMobile(window.matchMedia('(max-width: 1024px)').matches);
+
     const handleScroll = () => {
       if (window.scrollY > 40) {
         setScrolled(true);
@@ -25,7 +28,7 @@ export default function Navbar() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 

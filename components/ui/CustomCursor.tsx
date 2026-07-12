@@ -18,6 +18,8 @@ export default function CustomCursor() {
 
   useEffect(() => {
     setMounted(true);
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
+    if (isMobile) return;
 
     const moveCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX);

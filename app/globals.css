@@ -241,5 +241,32 @@ section[id] {
   opacity: 0;
 }
 
+/* ----------------------------------------------------
+   MOBILE-ONLY PERFORMANCE & LAYOUT OPTIMIZATIONS
+   ---------------------------------------------------- */
+@media (max-width: 1024px) {
+  /* Reduce opacity of fixed grain filter slightly on mobile to save GPU composition bandwidth,
+     but keep it visible to preserve the paper texture brand identity */
+  .grain-overlay {
+    opacity: 0.015 !important;
+  }
+
+  /* Optimize expensive backdrop blurs (glassmorphism) on mobile to save GPU cycles,
+     using a smaller blur radius (8px/10px) to keep the premium frosted aesthetic */
+  .glass-card {
+    backdrop-filter: blur(8px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(8px) saturate(140%) !important;
+  }
+  
+  .glass-curtain {
+    backdrop-filter: blur(10px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(140%) !important;
+  }
+
+  /* Keep the standard desktop scene heights and sticky pinning configurations
+     active on mobile so that GSAP pinning timeline scrolling works perfectly. */
+}
+
+
 
 

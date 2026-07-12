@@ -14,8 +14,12 @@ interface Testimonial {
 }
 
 function TeleprompterText({ text }: { text: string }) {
-  // Split by words to animate progressively
+  const [isMobile, setIsMobile] = useState(false);
   const words = text.split(' ');
+
+  useEffect(() => {
+    setIsMobile(window.matchMedia('(max-width: 1024px)').matches);
+  }, []);
 
   return (
     <motion.p
@@ -29,8 +33,8 @@ function TeleprompterText({ text }: { text: string }) {
         <motion.span
           key={i}
           variants={{
-            hidden: { opacity: 0.12, filter: 'blur(3px)', y: 4 },
-            visible: { opacity: 1, filter: 'blur(0px)', y: 0 }
+            hidden: { opacity: 0.12, filter: isMobile ? 'none' : 'blur(3px)', y: 4 },
+            visible: { opacity: 1, filter: isMobile ? 'none' : 'blur(0px)', y: 0 }
           }}
           transition={{ duration: 0.35, ease: easeCustom }}
           className="inline-block mr-1.5"
