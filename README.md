@@ -1,5 +1,7 @@
 # Y&M SYSTEMS — Landing Page
 
+![Y&M SYSTEMS](./public/preview.png)
+
 Landing page institucional desenvolvida para a **Y&M SYSTEMS**, projetada para apresentar a empresa, seus diferenciais, sua filosofia e seus serviços por meio de uma experiência moderna, elegante e altamente responsiva.
 
 O projeto foi construído com foco em **performance**, **experiência do usuário (UX)**, **interface moderna (UI)** e **animações de alta qualidade**, mantendo excelente compatibilidade entre dispositivos desktop e mobile.
