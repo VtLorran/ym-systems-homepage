@@ -10,6 +10,7 @@ interface LenisProviderProps {
 export default function LenisProvider({ children }: LenisProviderProps) {
   useEffect(() => {
     const isMobile = window.matchMedia('(max-width: 1024px)').matches;
+    if (isMobile) return;
 
     // Initialize Lenis
     const lenis = new Lenis({

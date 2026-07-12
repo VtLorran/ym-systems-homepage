@@ -8,13 +8,16 @@ export default function HeroParticles() {
 
   useEffect(() => {
     setMounted(true);
+    const checkMobile = window.matchMedia('(max-width: 1024px)').matches;
+    if (checkMobile) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
+    const isMobile = false;
 
     let animationFrameId: number;
     let particles: Particle[] = [];

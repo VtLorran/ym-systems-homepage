@@ -38,11 +38,7 @@ export default function Home() {
       ignoreMobileResize: true,
     });
 
-    if (checkMobile) {
-      ScrollTrigger.normalizeScroll({
-        allowNestedScroll: true,
-      });
-    }
+    // ScrollTrigger.normalizeScroll disabled on mobile to allow native momentum scrolling
 
     if (!checkMobile) {
       // Initial position setups for animated layers to prevent layout shifts & Tailwind conflicts
@@ -145,20 +141,6 @@ export default function Home() {
         stagger: 0.08,
         ease: 'power3.out',
       }, 0.35);
-    } else {
-      // Mobile version: Simple entrance fade-in only, no movement/translations, play once, no scrub
-      gsap.fromTo(['.sobre-left', '.sobre-right'], {
-        opacity: 0,
-      }, {
-        opacity: 1,
-        duration: 0.6,
-        ease: 'power1.out',
-        scrollTrigger: {
-          trigger: '.sobre-scene',
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        }
-      });
     }
 
     // 4. Billboard Swipe Scene (Scene 5)
@@ -192,39 +174,10 @@ export default function Home() {
         duration: 0.4,
         ease: 'power2.out',
       }, 0.2);
-    } else {
-      // Mobile version: Simple entrance fade-in only, no swipe or background changes
-      gsap.fromTo('.billboard-title', {
-        opacity: 0,
-      }, {
-        opacity: 1,
-        duration: 0.6,
-        ease: 'power1.out',
-        scrollTrigger: {
-          trigger: '.billboard-scene',
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        }
-      });
     }
 
     // 5. Services Card Non-Scrubbed Staggered Entrance (Bug 4)
-    if (checkMobile) {
-      // Mobile version: simple entrance fade-in only, no movement/scale translations
-      gsap.fromTo('.services-card-wrap', {
-        opacity: 0,
-      }, {
-        opacity: 1,
-        stagger: 0.05,
-        duration: 0.5,
-        ease: 'power1.out',
-        scrollTrigger: {
-          trigger: '.services-scene',
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        }
-      });
-    } else {
+    if (!checkMobile) {
       gsap.fromTo('.services-card-wrap', {
         y: 45,
         opacity: 0,

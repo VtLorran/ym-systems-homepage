@@ -23,6 +23,11 @@ function StatCard({ targetNumber, suffix = '', decimals, label, sublabel, icon: 
   useEffect(() => {
     if (!isInView) return;
 
+    if (isMobile) {
+      setCount(targetNumber);
+      return;
+    }
+
     let startTime: number | null = null;
     const duration = 1500; // 1.5 seconds
 
@@ -43,7 +48,7 @@ function StatCard({ targetNumber, suffix = '', decimals, label, sublabel, icon: 
     };
 
     requestAnimationFrame(animate);
-  }, [isInView, targetNumber]);
+  }, [isInView, targetNumber, isMobile]);
 
   const displayValue = decimals !== undefined
     ? count.toFixed(decimals)

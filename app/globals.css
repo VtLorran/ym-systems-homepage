@@ -265,6 +265,56 @@ section[id] {
 
   /* Keep the standard desktop scene heights and sticky pinning configurations
      active on mobile so that GSAP pinning timeline scrolling works perfectly. */
+
+  /* Disable expensive backdrop-filter and CSS blur filters on background blobs on mobile */
+  *[class*="blur-[60px]"],
+  *[class*="blur-[70px]"],
+  *[class*="blur-[80px]"],
+  *[class*="blur-[85px]"],
+  *[class*="blur-[90px]"],
+  *[class*="blur-[100px]"],
+  *[class*="blur-[110px]"],
+  *[class*="blur-[120px]"],
+  *[class*="blur-[130px]"],
+  *[class*="blur-[140px]"],
+  *[class*="blur-[40px]"] {
+    display: none !important;
+  }
+
+  /* Reduce will-change on mobile to avoid creating unnecessary GPU composition layers */
+  *,
+  .will-change-transform,
+  .animate-subtle-zoom {
+    will-change: auto !important;
+  }
+
+  /* Disable the continuous background zoom animation to prevent constant CPU/GPU repaints */
+  .animate-subtle-zoom {
+    animation: none !important;
+  }
+
+  /* Contact section form card: reduce backdrop blur significantly, simplify shadow & opacity */
+  #contato .glass-card {
+    backdrop-filter: blur(2px) saturate(115%) !important;
+    -webkit-backdrop-filter: blur(2px) saturate(115%) !important;
+    background: rgba(11, 13, 20, 0.85) !important;
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.3) !important;
+    border-color: rgba(255, 255, 255, 0.05) !important;
+  }
+
+  /* Layout alignment correction safety net: prevent elements from being hidden or translated */
+  #diferenciais .grid > div,
+  .sobre-left,
+  .sobre-right,
+  .sobre-point,
+  .pipeline-node,
+  .billboard-title,
+  .billboard-tag,
+  .services-card-wrap {
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
 }
 
 /* Subtle zoom animation for mobile background */
@@ -281,6 +331,6 @@ section[id] {
 }
 
 .animate-subtle-zoom {
-  animation: subtle-zoom 25s infinite ease-in-out;
-  will-change: transform;
+  animation: none;
+  will-change: auto;
 }

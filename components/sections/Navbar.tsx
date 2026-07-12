@@ -45,7 +45,7 @@ export default function Navbar() {
     <>
       {/* Top Reading Progress Bar */}
       <motion.div
-        className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-accent-blue via-accent-purple to-accent-blue-2 origin-left z-[1000]"
+        className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-accent-blue via-accent-purple to-accent-blue-2 origin-left z-[1000] hidden lg:block"
         style={{ scaleX }}
       />
 

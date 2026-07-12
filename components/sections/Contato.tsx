@@ -61,28 +61,28 @@ export default function Contato() {
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <motion.div
-            variants={staggerContainer(0.12, 0.1)}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
+            variants={isMobile ? undefined : staggerContainer(0.12, 0.1)}
+            initial={isMobile ? undefined : "hidden"}
+            whileInView={isMobile ? undefined : "visible"}
+            viewport={isMobile ? undefined : { once: true, amount: 0.2 }}
             className="flex flex-col text-left"
           >
             <motion.span
-              variants={isMobile ? fadeIn(0.5) : fadeInUp(20, 0.5)}
+              variants={isMobile ? undefined : fadeInUp(20, 0.5)}
               className="text-xs font-bold text-accent-blue tracking-widest uppercase mb-4"
             >
               Vamos conversar
             </motion.span>
 
             <motion.h2
-              variants={isMobile ? fadeIn(0.5) : fadeInUp(20, 0.5)}
+              variants={isMobile ? undefined : fadeInUp(20, 0.5)}
               className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-text-primary tracking-tight leading-[1.12] mb-6 font-sans"
             >
               Pronto para construir o seu próximo sistema?
             </motion.h2>
 
             <motion.p
-              variants={isMobile ? fadeIn(0.5) : fadeInUp(20, 0.5)}
+              variants={isMobile ? undefined : fadeInUp(20, 0.5)}
               className="text-sm sm:text-base text-text-secondary leading-relaxed mb-10 max-w-md font-medium"
             >
               Fale diretamente com nossa equipe de engenharia. Analisamos sua
@@ -110,7 +110,7 @@ export default function Contato() {
               ].map((item, index) => (
                 <motion.div
                   key={index}
-                  variants={isMobile ? fadeIn(0.5, index * 0.1) : fadeInUp(20, 0.5, index * 0.1)}
+                  variants={isMobile ? undefined : fadeInUp(20, 0.5, index * 0.1)}
                   className="flex items-center gap-4"
                 >
                   <div className="w-10 h-10 rounded-xl bg-white/[0.02] border border-white/10 flex items-center justify-center text-accent-blue">
@@ -130,13 +130,13 @@ export default function Contato() {
           </motion.div>
 
           <motion.div
-            initial={isMobile ? { opacity: 0 } : { opacity: 0, scale: 0.95, filter: "blur(8px)" }}
-            whileInView={isMobile ? { opacity: 1 } : { opacity: 1, scale: 1, filter: "blur(0px)" }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={isMobile ? { duration: 0.5, ease: "easeOut" } : { duration: 0.8, ease: easeCustom }}
+            initial={isMobile ? undefined : { opacity: 0, scale: 0.95, filter: "blur(8px)" }}
+            whileInView={isMobile ? undefined : { opacity: 1, scale: 1, filter: "blur(0px)" }}
+            viewport={isMobile ? undefined : { once: true, amount: 0.2 }}
+            transition={isMobile ? undefined : { duration: 0.8, ease: easeCustom }}
             className="w-full max-w-[540px] mx-auto relative"
           >
-            <div className="absolute inset-0 bg-gradient-to-tr from-accent-blue/10 to-accent-purple/10 rounded-3xl blur-[40px] opacity-70 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-accent-blue/10 to-accent-purple/10 rounded-3xl blur-[40px] opacity-70 pointer-events-none hidden lg:block" />
 
             <div className="glass-card p-6 md:p-10 border-white/10 bg-black/45 relative z-10 overflow-hidden">
               <form onSubmit={handleSubmit} className="flex flex-col gap-5">

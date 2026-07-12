@@ -10,33 +10,19 @@ export default function Processo() {
   const lineRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Register ScrollTrigger plugin in browser environment
-    gsap.registerPlugin(ScrollTrigger);
-
     const isMobile = window.matchMedia('(max-width: 1024px)').matches;
 
     if (isMobile) {
-      // Mobile-optimized animations: simple entrance fade-in only, no movement/translations, no scroll-linked timeline
-      const stepElements = gsap.utils.toArray('.process-step');
-      const stepAnims = stepElements.map((step: any) => {
-        return gsap.fromTo(step,
-          { opacity: 0.15 },
-          {
-            opacity: 1,
-            duration: 0.5,
-            ease: 'power1.out',
-            scrollTrigger: {
-              trigger: step,
-              start: 'top 90%',
-              toggleActions: 'play none none none',
-            }
-          }
-        );
-      });
+      // Mobile version: Keep it purely static for maximum performance
+      return;
+    }
 
-      return () => {
-        stepAnims.forEach((anim: any) => anim.scrollTrigger?.kill());
-      };
+    // Register ScrollTrigger plugin in browser environment
+    gsap.registerPlugin(ScrollTrigger);
+
+    if (false) {
+      // Removed mobile scroll animations
+      return;
     } else {
       // Animate the vertical line scaleY from 0 to 1 based on scroll (Desktop only)
       const lineAnim = gsap.fromTo(

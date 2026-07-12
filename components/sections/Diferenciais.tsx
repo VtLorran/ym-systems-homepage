@@ -20,7 +20,7 @@ function DiferencialCard({ title, desc, icon: Icon, index, isMobile }: CardProps
 
   return (
     <motion.div
-      variants={isMobile ? fadeIn(0.5, index * 0.05) : fadeInSide(isLeft ? 'left' : 'right', 40, 0.7, index * 0.1)}
+      variants={isMobile ? undefined : fadeInSide(isLeft ? 'left' : 'right', 40, 0.7, index * 0.1)}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       className="p-8 rounded-2xl glass-card border-white/5 bg-black/35 hover:border-white/10 hover:bg-white/[0.02] flex flex-col justify-between overflow-hidden relative group cursor-default"
@@ -127,11 +127,11 @@ export default function Diferenciais() {
         </div>
 
         {/* Differentials Grid (Sliding entrance panels §4.3) */}
-        <motion.div
-          variants={staggerContainer(0.08, 0.1)}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.15 }}
+         <motion.div
+          variants={isMobile ? undefined : staggerContainer(0.08, 0.1)}
+          initial={isMobile ? undefined : "hidden"}
+          whileInView={isMobile ? undefined : "visible"}
+          viewport={isMobile ? undefined : { once: true, amount: 0.15 }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {items.map((item, index) => (
