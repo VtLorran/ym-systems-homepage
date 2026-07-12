@@ -7,9 +7,11 @@ import { fadeIn, fadeInUp, staggerContainer, easeCustom } from "../../lib/motion
 
 export default function Contato() {
   const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setIsMobile(window.matchMedia('(max-width: 1024px)').matches);
+    setMounted(true);
   }, []);
 
   const [formData, setFormData] = useState({
@@ -61,28 +63,28 @@ export default function Contato() {
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <motion.div
-            variants={isMobile ? undefined : staggerContainer(0.12, 0.1)}
-            initial={isMobile ? undefined : "hidden"}
-            whileInView={isMobile ? undefined : "visible"}
-            viewport={isMobile ? undefined : { once: true, amount: 0.2 }}
+            variants={(mounted && !isMobile) ? staggerContainer(0.12, 0.1) : undefined}
+            initial={(mounted && !isMobile) ? "hidden" : undefined}
+            whileInView={(mounted && !isMobile) ? "visible" : undefined}
+            viewport={(mounted && !isMobile) ? { once: true, amount: 0.2 } : undefined}
             className="flex flex-col text-left"
           >
             <motion.span
-              variants={isMobile ? undefined : fadeInUp(20, 0.5)}
+              variants={(mounted && !isMobile) ? fadeInUp(20, 0.5) : undefined}
               className="text-xs font-bold text-accent-blue tracking-widest uppercase mb-4"
             >
               Vamos conversar
             </motion.span>
 
             <motion.h2
-              variants={isMobile ? undefined : fadeInUp(20, 0.5)}
+              variants={(mounted && !isMobile) ? fadeInUp(20, 0.5) : undefined}
               className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-text-primary tracking-tight leading-[1.12] mb-6 font-sans"
             >
               Pronto para construir o seu próximo sistema?
             </motion.h2>
 
             <motion.p
-              variants={isMobile ? undefined : fadeInUp(20, 0.5)}
+              variants={(mounted && !isMobile) ? fadeInUp(20, 0.5) : undefined}
               className="text-sm sm:text-base text-text-secondary leading-relaxed mb-10 max-w-md font-medium"
             >
               Fale diretamente com nossa equipe de engenharia. Analisamos sua
@@ -110,7 +112,7 @@ export default function Contato() {
               ].map((item, index) => (
                 <motion.div
                   key={index}
-                  variants={isMobile ? undefined : fadeInUp(20, 0.5, index * 0.1)}
+                  variants={(mounted && !isMobile) ? fadeInUp(20, 0.5, index * 0.1) : undefined}
                   className="flex items-center gap-4"
                 >
                   <div className="w-10 h-10 rounded-xl bg-white/[0.02] border border-white/10 flex items-center justify-center text-accent-blue">
@@ -130,10 +132,10 @@ export default function Contato() {
           </motion.div>
 
           <motion.div
-            initial={isMobile ? undefined : { opacity: 0, scale: 0.95, filter: "blur(8px)" }}
-            whileInView={isMobile ? undefined : { opacity: 1, scale: 1, filter: "blur(0px)" }}
-            viewport={isMobile ? undefined : { once: true, amount: 0.2 }}
-            transition={isMobile ? undefined : { duration: 0.8, ease: easeCustom }}
+            initial={(mounted && !isMobile) ? { opacity: 0, scale: 0.95, filter: "blur(8px)" } : undefined}
+            whileInView={(mounted && !isMobile) ? { opacity: 1, scale: 1, filter: "blur(0px)" } : undefined}
+            viewport={(mounted && !isMobile) ? { once: true, amount: 0.2 } : undefined}
+            transition={(mounted && !isMobile) ? { duration: 0.8, ease: easeCustom } : undefined}
             className="w-full max-w-[540px] mx-auto relative"
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-accent-blue/10 to-accent-purple/10 rounded-3xl blur-[40px] opacity-70 pointer-events-none hidden lg:block" />

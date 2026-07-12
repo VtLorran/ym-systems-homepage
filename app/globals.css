@@ -310,7 +310,12 @@ section[id] {
   .pipeline-node,
   .billboard-title,
   .billboard-tag,
-  .services-card-wrap {
+  .services-card-wrap,
+  #contato .grid > div,
+  #contato .grid > div > span,
+  #contato .grid > div > h2,
+  #contato .grid > div > p,
+  #contato .grid > div > div > div {
     transform: none !important;
     opacity: 1 !important;
     filter: none !important;
