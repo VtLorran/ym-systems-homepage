@@ -40,6 +40,11 @@ export default function Tecnologias() {
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
     gsap.registerPlugin(ScrollTrigger);
 
     // Scroll-linked parallax translations at different speeds (Bug 6)
@@ -78,10 +83,13 @@ export default function Tecnologias() {
 
     return () => {
       p1.scrollTrigger?.kill();
+      p1.kill();
       p2.scrollTrigger?.kill();
+      p2.kill();
       p3.scrollTrigger?.kill();
+      p3.kill();
     };
-  }, []);
+  }, [mounted]);
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!containerRef.current) return;

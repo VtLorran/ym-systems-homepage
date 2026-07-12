@@ -238,7 +238,7 @@ section[id] {
 /* Hide swipe curtain layers initially on hydration/render to prevent white flashing */
 .billboard-swipe-bg,
 .poster-swipe-bg {
-  transform: translateY(100%);
+  opacity: 0;
 }
 
 

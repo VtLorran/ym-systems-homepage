@@ -16,20 +16,6 @@ export default function Hero({
   videoUrl = '',
   posterUrl = '',
 }: HeroProps) {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-  
   const isVideoActive = !!videoUrl;
 
   // Custom motion variants for cinematic entry (Section 3)
@@ -70,6 +56,7 @@ export default function Hero({
     }
   };
 
+  // Subtle indicator scroll down
   return (
     <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden pt-28 pb-16 px-6 md:px-12 bg-bg-base">
       {/* Background elements */}
@@ -121,7 +108,7 @@ export default function Hero({
           >
             <a
               href="#contato"
-              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-full text-sm font-semibold text-white bg-gradient-primary hover:shadow-[0_0_25px_rgba(139,92,246,0.5)] transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-7 py-3.5 rounded-full text-sm font-semibold text-white bg-gradient-primary hover:shadow-[0_0_25px_rgba(139,92,246,0.4)] transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
             >
               <span>Solicitar orçamento</span>
               <ArrowRight className="w-4 h-4" />
@@ -172,15 +159,7 @@ export default function Hero({
       </div>
 
       {/* Subtle indicator scroll down */}
-      <motion.div 
-        className="hero-scroll-indicator absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-text-muted text-[10px] uppercase tracking-widest pointer-events-none z-30"
-        animate={{ 
-          opacity: scrolled ? 0 : 1, 
-          y: scrolled ? -20 : 0
-        }}
-        transition={{ duration: 0.3 }}
-        style={{ display: scrolled ? 'none' : 'flex' }}
-      >
+      <div className="hero-scroll-indicator absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-text-muted text-[10px] uppercase tracking-widest pointer-events-none z-30">
         <span>Scroll down</span>
         <div className="w-1.5 h-6 rounded-full bg-white/10 p-0.5 flex items-start justify-center">
           <motion.div
@@ -195,7 +174,7 @@ export default function Hero({
             }}
           />
         </div>
-      </motion.div>
+      </div>
 
       {/* Ticker tape curtain at the bottom of the hero */}
       <div className="hero-ticker-curtain absolute bottom-0 left-0 w-full z-30 py-4 border-y border-white/5 bg-bg-base/90 backdrop-blur-md overflow-hidden transform">

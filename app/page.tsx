@@ -30,8 +30,8 @@ export default function Home() {
 
     // Initial position setups for animated layers to prevent layout shifts & Tailwind conflicts
     gsap.set('.hero-ticker-curtain', { yPercent: 100 });
-    gsap.set('.billboard-swipe-bg', { yPercent: 100 });
-    gsap.set('.poster-swipe-bg', { yPercent: 100 });
+    gsap.set('.billboard-swipe-bg', { yPercent: 100, opacity: 0 });
+    gsap.set('.poster-swipe-bg', { yPercent: 100, opacity: 0 });
 
     // 1. Intro Reveal (Scene 1)
     const introTl = gsap.timeline({
@@ -139,17 +139,23 @@ export default function Home() {
       }
     });
 
-    billboardTl.to('.billboard-swipe-bg', {
+    billboardTl.fromTo('.billboard-swipe-bg', {
+      yPercent: 100,
+      opacity: 1,
+    }, {
       yPercent: 0,
+      duration: 0.5,
       ease: 'power3.inOut',
     }, 0)
     .to('.billboard-title', {
       color: '#05060A',
       scale: 1.15,
+      duration: 0.4,
       ease: 'power2.out',
     }, 0.2)
     .to('.billboard-tag', {
       color: '#2563EB',
+      duration: 0.4,
       ease: 'power2.out',
     }, 0.2);
 
@@ -175,7 +181,7 @@ export default function Home() {
       scrollTrigger: {
         trigger: '.poster-scene',
         start: 'top top',
-        end: '+=200%',
+        end: '+=160%',
         pin: '.poster-pin',
         scrub: 1.2,
         anticipatePin: 1,
@@ -185,6 +191,7 @@ export default function Home() {
     // ESTÁGIO 1 — Entrada: deslizar o fundo branco de baixo para cima
     posterTl.fromTo('.poster-swipe-bg', {
       yPercent: 100,
+      opacity: 1,
     }, {
       yPercent: 0,
       duration: 0.35,
@@ -239,15 +246,29 @@ export default function Home() {
     }, 1.1)
     .to('.poster-swipe-bg', {
       yPercent: -100,
+      opacity: 0,
       duration: 0.3,
       ease: 'power3.inOut',
     }, 1.3)
     // Pequeno espaço final para transição suave
     .to({}, { duration: 0.15 });
 
+    // Refresh ScrollTrigger on window load to prevent incorrect offsets due to late layout shifts
+    const handleLoad = () => {
+      ScrollTrigger.refresh();
+    };
+    window.addEventListener('load', handleLoad);
+
+    // Refresh after a small delay in case of late hydration shifts
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 1500);
+
     // Cleanup triggers on component unmount
     return () => {
       ScrollTrigger.getAll().forEach(t => t.kill());
+      window.removeEventListener('load', handleLoad);
+      clearTimeout(timer);
     };
   }, []);
 
@@ -303,11 +324,14 @@ export default function Home() {
 
         {/* Cena 5: Full-bleed billboard curtain swipe (Bug 2) */}
         <section className="scene billboard-scene" style={{ height: '150vh' }}>
-          <div className="scene__pin billboard-pin flex items-center justify-center bg-[#05060A] relative overflow-hidden">
-            {/* White curtain slider (Request 2) */}
-            <div className="billboard-swipe-bg absolute inset-0 bg-[#F5F6FA] z-0" />
+          <div className="scene__pin billboard-pin flex items-center justify-center bg-transparent relative overflow-hidden">
+            {/* Dark background layer */}
+            <div className="absolute inset-0 bg-[#05060A] z-0" />
             
-            <div className="relative z-10 text-center px-6">
+            {/* White curtain slider (Request 2) */}
+            <div className="billboard-swipe-bg absolute inset-0 bg-[#F5F6FA] z-10" />
+            
+            <div className="relative z-20 text-center px-6">
               <span className="billboard-tag text-xs font-bold text-accent-purple tracking-widest uppercase block mb-4">
                 Nossa Filosofia
               </span>
@@ -341,15 +365,18 @@ export default function Home() {
 
         {/* Cena 8: Symmetrical Final Poster Reveal (Bug 3) */}
         <section className="scene poster-scene bg-[#05060A]" style={{ height: '180vh' }}>
-          <div className="w-full h-screen overflow-hidden poster-pin flex flex-col items-center justify-center bg-[#05060A] relative text-center">
+          <div className="w-full h-screen overflow-hidden poster-pin flex flex-col items-center justify-center bg-transparent relative text-center">
+            {/* Dark background layer */}
+            <div className="absolute inset-0 bg-[#05060A] z-0" />
+
             {/* White curtain slider */}
-            <div className="poster-swipe-bg absolute inset-0 bg-white pointer-events-none z-0" />
+            <div className="poster-swipe-bg absolute inset-0 bg-white pointer-events-none z-10" />
 
-            <div className="poster-circle-bg absolute w-[600px] h-[600px] border border-dashed border-black/5 rounded-full animate-spin-slow pointer-events-none z-10 opacity-0" />
+            <div className="poster-circle-bg absolute w-[600px] h-[600px] border border-dashed border-black/5 rounded-full animate-spin-slow pointer-events-none z-20 opacity-0" />
             
-            <div className="poster-glow-bg absolute w-[50vw] h-[50vw] rounded-full bg-accent-blue/10 blur-[120px] pointer-events-none z-10 opacity-0" />
+            <div className="poster-glow-bg absolute w-[50vw] h-[50vw] rounded-full bg-accent-blue/10 blur-[120px] pointer-events-none z-20 opacity-0" />
 
-            <div className="poster-content relative z-20 max-w-3xl px-6 flex flex-col items-center select-none">
+            <div className="poster-content relative z-30 max-w-3xl px-6 flex flex-col items-center select-none">
               <span className="text-xs font-bold text-accent-purple tracking-widest uppercase mb-4 opacity-0 block">
                 Y&M SYSTEMS
               </span>
