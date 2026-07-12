@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Y&M SYSTEMS — Landing Page
 
-## Getting Started
+Landing page institucional desenvolvida para a **Y&M SYSTEMS**, projetada para apresentar a empresa, seus diferenciais, sua filosofia e seus serviços por meio de uma experiência moderna, elegante e altamente responsiva.
 
-First, run the development server:
+O projeto foi construído com foco em **performance**, **experiência do usuário (UX)**, **interface moderna (UI)** e **animações de alta qualidade**, mantendo excelente compatibilidade entre dispositivos desktop e mobile.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Principais características
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+* Interface moderna e profissional
+* Design totalmente responsivo
+* Alto desempenho em dispositivos móveis
+* Animações otimizadas para diferentes plataformas
+* Navegação fluida
+* Seções organizadas para apresentação institucional
+* Formulário de contato
+* Layout pensado para conversão e apresentação comercial
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Tecnologias utilizadas
 
-To learn more about Next.js, take a look at the following resources:
+O projeto foi desenvolvido utilizando tecnologias modernas do ecossistema JavaScript, priorizando desempenho, escalabilidade e uma excelente experiência de desenvolvimento.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+* **React** — Construção da interface baseada em componentes reutilizáveis.
+* **TypeScript** — Tipagem estática para maior segurança e manutenção do código.
+* **Next.js** — Framework React utilizado para estruturação, otimização e renderização da aplicação.
+* **Tailwind CSS** — Estilização utilitária para desenvolvimento rápido e consistente.
+* **CSS** — Estilos personalizados e ajustes específicos da interface.
+* **GSAP (GreenSock Animation Platform)** — Criação de animações avançadas, transições e microinterações de alta performance.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Responsividade
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+A landing page foi desenvolvida para proporcionar uma ótima experiência em:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* Desktop
+* Notebook
+* Tablet
+* Smartphones Android
+* iPhone (iOS)
+
+Durante o desenvolvimento foram realizadas diversas otimizações específicas para dispositivos móveis, reduzindo o consumo de CPU, GPU e memória sem comprometer a identidade visual da aplicação.
+
+---
+
+## Performance
+
+O projeto recebeu uma etapa dedicada de otimização para garantir:
+
+* Scroll fluido
+* Redução de processamento durante a navegação
+* Baixo consumo de memória
+* Melhor gerenciamento das animações
+* Renderização eficiente em dispositivos móveis
+* Carregamento mais rápido
+
+As animações foram cuidadosamente balanceadas para preservar a experiência visual enquanto reduzem significativamente a carga computacional em smartphones.
+
+---
+
+## Objetivo
+
+Esta landing page tem como objetivo representar a identidade da **Y&M SYSTEMS**, transmitindo inovação, tecnologia e profissionalismo por meio de uma experiência visual envolvente, moderna e eficiente.
+
+---
+
+## Licença
+
+Este projeto foi desenvolvido para a **Y&M SYSTEMS**.
+
+Todos os direitos reservados.
+
+---
+
+## Desenvolvido por
+
+**Y&M SYSTEMS**
+
+Construindo soluções digitais modernas, performáticas e escaláveis.
