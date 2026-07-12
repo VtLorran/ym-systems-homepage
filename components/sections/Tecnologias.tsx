@@ -45,6 +45,9 @@ export default function Tecnologias() {
   useEffect(() => {
     if (!mounted) return;
 
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
+    if (isMobile) return;
+
     gsap.registerPlugin(ScrollTrigger);
 
     // Scroll-linked parallax translations at different speeds (Bug 6)

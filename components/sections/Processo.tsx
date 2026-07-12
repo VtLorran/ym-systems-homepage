@@ -13,48 +13,92 @@ export default function Processo() {
     // Register ScrollTrigger plugin in browser environment
     gsap.registerPlugin(ScrollTrigger);
 
-    // Animate the vertical line scaleY from 0 to 1 based on scroll
-    const lineAnim = gsap.fromTo(
-      lineRef.current,
-      { scaleY: 0 },
-      {
-        scaleY: 1,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: 'top 40%',
-          end: 'bottom 60%',
-          scrub: 1,
-        },
-      }
-    );
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
 
-    // Animate the steps' entrance and illumination (highlight active, fade out inactive)
-    const stepElements = gsap.utils.toArray('.process-step');
-    const stepAnims = stepElements.map((step: any) => {
-      return gsap.timeline({
-        scrollTrigger: {
-          trigger: step,
-          start: 'top 85%',
-          end: 'bottom 15%',
-          scrub: 0.5,
+    if (isMobile) {
+      // Mobile-optimized animations: simple entrance, play once, no scrub
+      const stepElements = gsap.utils.toArray('.process-step');
+      const stepAnims = stepElements.map((step: any) => {
+        return gsap.fromTo(step,
+          { opacity: 0.2, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: step,
+              start: 'top 85%',
+              toggleActions: 'play none none none',
+            }
+          }
+        );
+      });
+
+      // Simple vertical progress line animation
+      const lineAnim = gsap.fromTo(
+        lineRef.current,
+        { scaleY: 0 },
+        {
+          scaleY: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top 40%',
+            end: 'bottom 60%',
+            scrub: 1.5,
+          },
         }
-      })
-      .fromTo(step, 
-        { opacity: 0.15, y: 40, scale: 0.98 }, 
-        { opacity: 1, y: 0, scale: 1, duration: 0.3 }
-      )
-      .to(step, 
-        { opacity: 0.15, y: -45, scale: 0.98, duration: 0.3 }, 
-        '+=0.4'
       );
-    });
 
-    return () => {
-      // Clean up GSAP instances
-      lineAnim.scrollTrigger?.kill();
-      stepAnims.forEach((tl: any) => tl.scrollTrigger?.kill());
-    };
+      return () => {
+        lineAnim.scrollTrigger?.kill();
+        stepAnims.forEach((anim: any) => anim.scrollTrigger?.kill());
+      };
+    } else {
+      // Animate the vertical line scaleY from 0 to 1 based on scroll (Desktop only)
+      const lineAnim = gsap.fromTo(
+        lineRef.current,
+        { scaleY: 0 },
+        {
+          scaleY: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top 40%',
+            end: 'bottom 60%',
+            scrub: 1,
+          },
+        }
+      );
+
+      // Animate the steps' entrance and illumination (highlight active, fade out inactive) (Desktop only)
+      const stepElements = gsap.utils.toArray('.process-step');
+      const stepAnims = stepElements.map((step: any) => {
+        return gsap.timeline({
+          scrollTrigger: {
+            trigger: step,
+            start: 'top 85%',
+            end: 'bottom 15%',
+            scrub: 0.5,
+          }
+        })
+        .fromTo(step, 
+          { opacity: 0.15, y: 40, scale: 0.98 }, 
+          { opacity: 1, y: 0, scale: 1, duration: 0.3 }
+        )
+        .to(step, 
+          { opacity: 0.15, y: -45, scale: 0.98, duration: 0.3 }, 
+          '+=0.4'
+        );
+      });
+
+      return () => {
+        // Clean up GSAP instances
+        lineAnim.scrollTrigger?.kill();
+        stepAnims.forEach((tl: any) => tl.scrollTrigger?.kill());
+      };
+    }
   }, []);
 
   const steps = [

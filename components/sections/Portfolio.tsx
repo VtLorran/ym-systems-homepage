@@ -143,7 +143,7 @@ const ProjectCard = ({ project, direction, onSelect }: ProjectCardProps) => {
                   </div>
                   {/* Tracking marker */}
                   <div className="relative z-10 flex items-center gap-1.5 bg-black/60 border border-white/10 p-1.5 rounded-md self-start max-w-[130px]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-accent-blue animate-ping shrink-0" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent-blue md:animate-ping shrink-0" />
                     <div className="flex flex-col">
                       <span className="text-[6px] text-text-secondary uppercase leading-none">Veículo TRK-09</span>
                       <span className="text-[7px] md:text-[8px] font-bold text-text-primary leading-tight mt-0.5">Em trânsito</span>

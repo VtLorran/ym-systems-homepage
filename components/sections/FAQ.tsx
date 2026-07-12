@@ -45,26 +45,37 @@ function FAQAccordion({ question, answer, isOpen, onToggle }: FAQItem & { isOpen
             className="overflow-hidden"
           >
             <div className="pb-6 pt-2 pr-6">
-              <motion.p
-                variants={staggerContainer(0.015, 0.05)}
-                initial="hidden"
-                animate="visible"
-                className="text-xs sm:text-sm text-text-secondary leading-relaxed font-medium"
-              >
-                {answerWords.map((word, i) => (
-                  <motion.span
-                    key={i}
-                    variants={{
-                      hidden: { opacity: 0.15, filter: isMobile ? 'none' : 'blur(2px)', y: 3 },
-                      visible: { opacity: 1, filter: isMobile ? 'none' : 'blur(0px)', y: 0 }
-                    }}
-                    transition={{ duration: 0.3 }}
-                    className="inline-block mr-1"
-                  >
-                    {word}
-                  </motion.span>
-                ))}
-              </motion.p>
+              {isMobile ? (
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.25 }}
+                  className="text-xs sm:text-sm text-text-secondary leading-relaxed font-medium"
+                >
+                  {answer}
+                </motion.p>
+              ) : (
+                <motion.p
+                  variants={staggerContainer(0.015, 0.05)}
+                  initial="hidden"
+                  animate="visible"
+                  className="text-xs sm:text-sm text-text-secondary leading-relaxed font-medium"
+                >
+                  {answerWords.map((word, i) => (
+                    <motion.span
+                      key={i}
+                      variants={{
+                        hidden: { opacity: 0.15, filter: 'blur(2px)', y: 3 },
+                        visible: { opacity: 1, filter: 'blur(0px)', y: 0 }
+                      }}
+                      transition={{ duration: 0.3 }}
+                      className="inline-block mr-1"
+                    >
+                      {word}
+                    </motion.span>
+                  ))}
+                </motion.p>
+              )}
             </div>
           </motion.div>
         )}

@@ -7,6 +7,7 @@ import { Activity, Cpu, Database, Server, Terminal, User } from 'lucide-react';
 export default function DashboardMockup() {
   const cardRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Mouse positions for 3D tilt
   const x = useMotionValue(0);
@@ -46,28 +47,62 @@ export default function DashboardMockup() {
 
   useEffect(() => {
     setMounted(true);
-    const interval = setInterval(() => {
-      const paths = [
-        'GET /api/v1/dashboard/metrics',
-        'PATCH /api/v2/users/settings',
-        'POST /api/v1/webhooks/stripe',
-        'GET /api/v2/analytics/reports',
-        'DB_QUERY: SELECT * FROM billing',
-      ];
-      const statuses = ['200 OK', '201 CREATED', '200 OK', '101 SWITCHING', 'SUCCESS'];
-      const randomIndex = Math.floor(Math.random() * paths.length);
-      
-      setLogs((prev) => [
-        {
-          id: Date.now(),
-          text: paths[randomIndex],
-          status: statuses[Math.floor(Math.random() * statuses.length)],
-        },
-        ...prev.slice(0, 2),
-      ]);
-    }, 4000);
+    const checkMobile = window.matchMedia('(max-width: 1024px)').matches;
+    setIsMobile(checkMobile);
 
-    return () => clearInterval(interval);
+    let interval: NodeJS.Timeout | null = null;
+    let observer: IntersectionObserver | null = null;
+
+    const startInterval = () => {
+      if (interval) return;
+      // Throttled speed on mobile (8 seconds) vs desktop (4 seconds)
+      const speed = checkMobile ? 8000 : 4000;
+      interval = setInterval(() => {
+        const paths = [
+          'GET /api/v1/dashboard/metrics',
+          'PATCH /api/v2/users/settings',
+          'POST /api/v1/webhooks/stripe',
+          'GET /api/v2/analytics/reports',
+          'DB_QUERY: SELECT * FROM billing',
+        ];
+        const statuses = ['200 OK', '201 CREATED', '200 OK', '101 SWITCHING', 'SUCCESS'];
+        const randomIndex = Math.floor(Math.random() * paths.length);
+        
+        setLogs((prev) => [
+          {
+            id: Date.now(),
+            text: paths[randomIndex],
+            status: statuses[Math.floor(Math.random() * statuses.length)],
+          },
+          ...prev.slice(0, 2),
+        ]);
+      }, speed);
+    };
+
+    const stopInterval = () => {
+      if (interval) {
+        clearInterval(interval);
+        interval = null;
+      }
+    };
+
+    if (cardRef.current) {
+      observer = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          startInterval();
+        } else {
+          stopInterval();
+        }
+      }, { threshold: 0.05 });
+      observer.observe(cardRef.current);
+    }
+
+    return () => {
+      stopInterval();
+      if (observer) {
+        observer.disconnect();
+      }
+    };
   }, []);
 
   if (!mounted) return null;
@@ -79,16 +114,18 @@ export default function DashboardMockup() {
     >
       <motion.div
         ref={cardRef}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        style={{
+        onMouseMove={!isMobile ? handleMouseMove : undefined}
+        onMouseLeave={!isMobile ? handleMouseLeave : undefined}
+        style={!isMobile ? {
           rotateX: springX,
           rotateY: springY,
-        }}
+        } : undefined}
         className="w-full max-w-[620px] aspect-[4/3] glass-card flex flex-col overflow-hidden relative group"
       >
-        {/* Border glow shine */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-accent-blue/10 via-transparent to-accent-purple/10 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+        {/* Border glow shine - hidden on mobile */}
+        {!isMobile && (
+          <div className="absolute inset-0 bg-gradient-to-tr from-accent-blue/10 via-transparent to-accent-purple/10 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+        )}
         
         {/* Top Header Bar */}
         <div className="h-11 border-b border-white/5 px-4 flex items-center justify-between bg-white/[0.01]">
@@ -198,10 +235,10 @@ export default function DashboardMockup() {
                     r="4"
                     fill="var(--accent-purple)"
                     className="shadow-md shadow-accent-purple"
-                    animate={{
+                    animate={!isMobile ? {
                       r: [3, 5, 3],
                       opacity: [0.7, 1, 0.7],
-                    }}
+                    } : undefined}
                     transition={{
                       duration: 2,
                       repeat: Infinity,

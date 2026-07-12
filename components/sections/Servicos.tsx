@@ -37,17 +37,17 @@ function ServiceCard({ title, desc, icon: Icon }: ServiceItem) {
         '--mouse-y': `${coords.y}px`,
       } as React.CSSProperties}
     >
-      {/* Local Spotlight Glow inside the card */}
+      {/* Local Spotlight Glow inside the card - Hidden on mobile to save GPU composition resources */}
       <div 
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none hidden lg:block"
         style={{
           background: `radial-gradient(350px circle at var(--mouse-x) var(--mouse-y), rgba(59, 130, 246, 0.08), transparent 70%)`
         }}
       />
 
-      {/* Local Border Glow */}
+      {/* Local Border Glow - Hidden on mobile to save GPU composition resources */}
       <div 
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl hidden lg:block"
         style={{
           padding: '1px',
           background: `radial-gradient(180px circle at var(--mouse-x) var(--mouse-y), rgba(139, 92, 246, 0.3), transparent 70%)`,
@@ -115,9 +115,9 @@ export default function Servicos() {
       {/* Background radial highlight */}
       <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] rounded-full bg-accent-blue/5 blur-[120px] pointer-events-none" />
 
-      {/* Continuous loop dotted circles in the background */}
-      <div className="absolute -right-24 -top-24 w-96 h-96 border border-dashed border-white/5 rounded-full animate-spin-slow pointer-events-none z-0" />
-      <div className="absolute -left-24 -bottom-24 w-[480px] h-[480px] border border-dashed border-white/5 rounded-full animate-spin-slow pointer-events-none z-0" />
+      {/* Continuous loop dotted circles in the background - hidden on mobile */}
+      <div className="absolute -right-24 -top-24 w-96 h-96 border border-dashed border-white/5 rounded-full animate-spin-slow pointer-events-none z-0 hidden lg:block" />
+      <div className="absolute -left-24 -bottom-24 w-[480px] h-[480px] border border-dashed border-white/5 rounded-full animate-spin-slow pointer-events-none z-0 hidden lg:block" />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         {/* Header */}

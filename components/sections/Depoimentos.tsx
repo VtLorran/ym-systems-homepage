@@ -21,6 +21,20 @@ function TeleprompterText({ text }: { text: string }) {
     setIsMobile(window.matchMedia('(max-width: 1024px)').matches);
   }, []);
 
+  if (isMobile) {
+    return (
+      <motion.p
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className="text-base sm:text-lg md:text-xl text-text-primary leading-relaxed font-sans font-medium tracking-tight mb-8"
+      >
+        {text}
+      </motion.p>
+    );
+  }
+
   return (
     <motion.p
       variants={staggerContainer(0.02, 0.1)}
@@ -33,8 +47,8 @@ function TeleprompterText({ text }: { text: string }) {
         <motion.span
           key={i}
           variants={{
-            hidden: { opacity: 0.12, filter: isMobile ? 'none' : 'blur(3px)', y: 4 },
-            visible: { opacity: 1, filter: isMobile ? 'none' : 'blur(0px)', y: 0 }
+            hidden: { opacity: 0.12, filter: 'blur(3px)', y: 4 },
+            visible: { opacity: 1, filter: 'blur(0px)', y: 0 }
           }}
           transition={{ duration: 0.35, ease: easeCustom }}
           className="inline-block mr-1.5"
