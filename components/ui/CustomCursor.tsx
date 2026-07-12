@@ -7,6 +7,7 @@ export default function CustomCursor() {
   const [mounted, setMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
@@ -18,8 +19,9 @@ export default function CustomCursor() {
 
   useEffect(() => {
     setMounted(true);
-    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
-    if (isMobile) return;
+    const checkMobile = window.matchMedia('(max-width: 1024px)').matches;
+    setIsMobile(checkMobile);
+    if (checkMobile) return;
 
     const moveCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX);
@@ -61,7 +63,7 @@ export default function CustomCursor() {
     };
   }, [cursorX, cursorY, isVisible]);
 
-  if (!mounted) return null;
+  if (!mounted || isMobile) return null;
 
   return (
     <>

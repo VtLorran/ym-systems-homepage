@@ -17,6 +17,11 @@ export default function Hero({
   posterUrl = '',
 }: HeroProps) {
   const isVideoActive = !!videoUrl;
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.matchMedia('(max-width: 1024px)').matches);
+  }, []);
 
   // Custom motion variants for cinematic entry (Section 3)
   const containerFade: Variants = {
@@ -33,7 +38,7 @@ export default function Hero({
   };
 
   const itemFadeUp: Variants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: isMobile ? 0 : 20 },
     visible: {
       opacity: 1,
       y: 0,
@@ -43,15 +48,15 @@ export default function Hero({
 
   // clip-path curtain opening upwards (Section 3)
   const clipPathReveal: Variants = {
-    hidden: { clipPath: 'inset(100% 0% 0% 0%)', opacity: 0.3, y: 60 },
+    hidden: { clipPath: isMobile ? 'inset(0% 0% 0% 0%)' : 'inset(100% 0% 0% 0%)', opacity: 0.3, y: isMobile ? 0 : 60 },
     visible: {
       clipPath: 'inset(0% 0% 0% 0%)',
       opacity: 1,
       y: 0,
       transition: {
-        duration: 1.1,
-        ease: [0.16, 1, 0.3, 1], // Cinematic cubic-bezier ease
-        delay: 0.25
+        duration: isMobile ? 0.5 : 1.1,
+        ease: isMobile ? 'easeOut' : [0.16, 1, 0.3, 1], // Cinematic cubic-bezier ease
+        delay: isMobile ? 0 : 0.25
       }
     }
   };
@@ -60,7 +65,7 @@ export default function Hero({
   return (
     <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden pt-28 pb-16 px-6 md:px-12 bg-bg-base">
       {/* Background elements */}
-      <HeroParticles />
+      {!isMobile && <HeroParticles />}
 
       <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center relative z-20">
         

@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useInView, motion } from 'framer-motion';
 import { Activity, Award, Smile, ShieldAlert } from 'lucide-react';
-import { fadeInUp, staggerContainer } from '../../lib/motion';
+import { fadeInUp, staggerContainer, fadeIn } from '../../lib/motion';
 
 interface StatItemProps {
   value: string;
@@ -15,7 +15,7 @@ interface StatItemProps {
   icon: React.ComponentType<any>;
 }
 
-function StatCard({ targetNumber, suffix = '', decimals, label, sublabel, icon: Icon }: StatItemProps) {
+function StatCard({ targetNumber, suffix = '', decimals, label, sublabel, icon: Icon, isMobile }: StatItemProps & { isMobile: boolean }) {
   const [count, setCount] = useState(0);
   const cardRef = useRef(null);
   const isInView = useInView(cardRef, { once: true, amount: 0.3 });
@@ -52,7 +52,7 @@ function StatCard({ targetNumber, suffix = '', decimals, label, sublabel, icon: 
   return (
     <motion.div
       ref={cardRef}
-      variants={fadeInUp(20, 0.4)}
+      variants={isMobile ? fadeIn(0.4) : fadeInUp(20, 0.4)}
       className="p-6 rounded-2xl glass-card flex flex-col justify-between border-white/5 bg-black/30 hover:border-white/10 relative overflow-hidden group min-h-[200px]"
     >
       <div className="absolute inset-0 bg-gradient-to-br from-accent-blue/5 via-transparent to-accent-purple/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -79,6 +79,11 @@ function StatCard({ targetNumber, suffix = '', decimals, label, sublabel, icon: 
 }
 
 export default function Stats() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    setIsMobile(window.matchMedia('(max-width: 1024px)').matches);
+  }, []);
+
   // Balanced sublabel lengths to prevent cards from wrapping differently (Request 3)
   const statsData: StatItemProps[] = [
     {
@@ -128,7 +133,7 @@ export default function Stats() {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
         >
           {statsData.map((stat, index) => (
-            <StatCard key={index} {...stat} />
+            <StatCard key={index} isMobile={isMobile} {...stat} />
           ))}
         </motion.div>
       </div>

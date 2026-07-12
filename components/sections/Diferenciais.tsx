@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Code2, HeartHandshake, Lock, ShieldAlert, Sparkles, Zap } from 'lucide-react';
-import { easeCustom, fadeInSide, staggerContainer } from '../../lib/motion';
+import { easeCustom, fadeIn, fadeInSide, staggerContainer } from '../../lib/motion';
 
 interface CardProps {
   title: string;
@@ -12,7 +12,7 @@ interface CardProps {
   index: number;
 }
 
-function DiferencialCard({ title, desc, icon: Icon, index }: CardProps) {
+function DiferencialCard({ title, desc, icon: Icon, index, isMobile }: CardProps & { isMobile: boolean }) {
   const [hovered, setHovered] = useState(false);
 
   // Alternating sliding direction for panels entrance (§4.3)
@@ -20,7 +20,7 @@ function DiferencialCard({ title, desc, icon: Icon, index }: CardProps) {
 
   return (
     <motion.div
-      variants={fadeInSide(isLeft ? 'left' : 'right', 40, 0.7, index * 0.1)}
+      variants={isMobile ? fadeIn(0.5, index * 0.05) : fadeInSide(isLeft ? 'left' : 'right', 40, 0.7, index * 0.1)}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       className="p-8 rounded-2xl glass-card border-white/5 bg-black/35 hover:border-white/10 hover:bg-white/[0.02] flex flex-col justify-between overflow-hidden relative group cursor-default"
@@ -67,6 +67,12 @@ function DiferencialCard({ title, desc, icon: Icon, index }: CardProps) {
 }
 
 export default function Diferenciais() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.matchMedia('(max-width: 1024px)').matches);
+  }, []);
+
   const items = [
     {
       title: 'Código Altamente Limpo',
@@ -129,7 +135,7 @@ export default function Diferenciais() {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {items.map((item, index) => (
-            <DiferencialCard key={index} index={index} {...item} />
+            <DiferencialCard key={index} index={index} isMobile={isMobile} {...item} />
           ))}
         </motion.div>
 

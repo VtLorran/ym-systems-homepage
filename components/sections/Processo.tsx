@@ -16,43 +16,25 @@ export default function Processo() {
     const isMobile = window.matchMedia('(max-width: 1024px)').matches;
 
     if (isMobile) {
-      // Mobile-optimized animations: simple entrance, play once, no scrub
+      // Mobile-optimized animations: simple entrance fade-in only, no movement/translations, no scroll-linked timeline
       const stepElements = gsap.utils.toArray('.process-step');
       const stepAnims = stepElements.map((step: any) => {
         return gsap.fromTo(step,
-          { opacity: 0.2, y: 30 },
+          { opacity: 0.15 },
           {
             opacity: 1,
-            y: 0,
-            duration: 0.6,
-            ease: 'power2.out',
+            duration: 0.5,
+            ease: 'power1.out',
             scrollTrigger: {
               trigger: step,
-              start: 'top 85%',
+              start: 'top 90%',
               toggleActions: 'play none none none',
             }
           }
         );
       });
 
-      // Simple vertical progress line animation
-      const lineAnim = gsap.fromTo(
-        lineRef.current,
-        { scaleY: 0 },
-        {
-          scaleY: 1,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top 40%',
-            end: 'bottom 60%',
-            scrub: 1.5,
-          },
-        }
-      );
-
       return () => {
-        lineAnim.scrollTrigger?.kill();
         stepAnims.forEach((anim: any) => anim.scrollTrigger?.kill());
       };
     } else {

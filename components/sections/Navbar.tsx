@@ -103,10 +103,10 @@ export default function Navbar() {
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
             className="absolute top-full left-0 right-0 bg-bg-base/95 backdrop-blur-2xl border-b border-white/5 py-6 px-8 flex flex-col gap-5 lg:hidden shadow-2xl"
           >
             {navLinks.map((link) => (

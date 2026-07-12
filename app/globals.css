@@ -267,6 +267,20 @@ section[id] {
      active on mobile so that GSAP pinning timeline scrolling works perfectly. */
 }
 
+/* Subtle zoom animation for mobile background */
+@keyframes subtle-zoom {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 
-
-
+.animate-subtle-zoom {
+  animation: subtle-zoom 25s infinite ease-in-out;
+  will-change: transform;
+}

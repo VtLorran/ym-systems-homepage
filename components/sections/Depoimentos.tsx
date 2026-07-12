@@ -13,19 +13,14 @@ interface Testimonial {
   company: string;
 }
 
-function TeleprompterText({ text }: { text: string }) {
-  const [isMobile, setIsMobile] = useState(false);
+function TeleprompterText({ text, isMobile }: { text: string; isMobile: boolean }) {
   const words = text.split(' ');
-
-  useEffect(() => {
-    setIsMobile(window.matchMedia('(max-width: 1024px)').matches);
-  }, []);
 
   if (isMobile) {
     return (
       <motion.p
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
         className="text-base sm:text-lg md:text-xl text-text-primary leading-relaxed font-sans font-medium tracking-tight mb-8"
@@ -62,6 +57,11 @@ function TeleprompterText({ text }: { text: string }) {
 
 export default function Depoimentos() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.matchMedia('(max-width: 1024px)').matches);
+  }, []);
 
   const testimonials: Testimonial[] = [
     {
@@ -122,14 +122,14 @@ export default function Depoimentos() {
           <AnimatePresence mode="wait">
             <motion.div
               key={activeIndex}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
+              initial={isMobile ? { opacity: 0 } : { opacity: 0, y: 15 }}
+              animate={isMobile ? { opacity: 1 } : { opacity: 1, y: 0 }}
+              exit={isMobile ? { opacity: 0 } : { opacity: 0, y: -15 }}
               transition={{ duration: 0.45 }}
               className="p-8 md:p-12 rounded-2xl glass-card border-white/5 bg-black/35 relative overflow-hidden"
             >
               {/* Teleprompter staggered text reveal */}
-              <TeleprompterText text={testimonials[activeIndex].text} />
+              <TeleprompterText text={testimonials[activeIndex].text} isMobile={isMobile} />
 
               {/* Author Details block */}
               <div className="flex items-center gap-4 mt-6 pt-6 border-t border-white/5">

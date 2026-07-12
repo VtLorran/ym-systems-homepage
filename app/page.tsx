@@ -44,10 +44,12 @@ export default function Home() {
       });
     }
 
-    // Initial position setups for animated layers to prevent layout shifts & Tailwind conflicts
-    gsap.set('.hero-ticker-curtain', { yPercent: 100 });
-    gsap.set('.billboard-swipe-bg', { yPercent: 100, opacity: 0 });
-    gsap.set('.poster-swipe-bg', { yPercent: 100, opacity: 0 });
+    if (!checkMobile) {
+      // Initial position setups for animated layers to prevent layout shifts & Tailwind conflicts
+      gsap.set('.hero-ticker-curtain', { yPercent: 100 });
+      gsap.set('.billboard-swipe-bg', { yPercent: 100, opacity: 0 });
+      gsap.set('.poster-swipe-bg', { yPercent: 100, opacity: 0 });
+    }
 
     // 1. Intro Reveal (Scene 1)
     const introTl = gsap.timeline({
@@ -68,29 +70,18 @@ export default function Home() {
       ease: 'power3.inOut',
     }, '+=0.2');
 
-    // 2. Hero Scene Pin & Zoom Timeline (Scene 2, 3, 4)
-    // Reduced height (120vh on mobile vs 180vh on desktop) to avoid dead scroll (Bug 3)
-    const heroTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '.hero-scene',
-        start: 'top top',
-        end: checkMobile ? '+=40%' : '+=80%',
-        pin: '.hero-pin',
-        scrub: 1.2,
-      }
-    });
+    // 2. Hero Scene Pin & Zoom Timeline (Scene 2, 3, 4) - Desktop only
+    if (!checkMobile) {
+      const heroTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '.hero-scene',
+          start: 'top top',
+          end: '+=80%',
+          pin: '.hero-pin',
+          scrub: 1.2,
+        }
+      });
 
-    if (checkMobile) {
-      // Simplified mobile timeline: slide curtain, skip heavy scale/translation of text container
-      heroTl.to('.hero-ticker-curtain', {
-        yPercent: 0,
-        ease: 'power3.inOut',
-      }, 0.15)
-      .to('.hero-scroll-indicator', {
-        opacity: 0,
-        ease: 'power2.out',
-      }, 0);
-    } else {
       heroTl.to('.hero-ticker-curtain', {
         yPercent: 0, // Slides up to bottom of viewport
         ease: 'power3.inOut',
@@ -109,31 +100,17 @@ export default function Home() {
     }
 
     // 3. Sobre Scene Pin & Stagger Entrance (Scene 4)
-    const sobreTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '.sobre-scene',
-        start: 'top top',
-        end: checkMobile ? '+=40%' : '+=80%',
-        pin: '.sobre-pin',
-        scrub: 1.2,
-      }
-    });
+    if (!checkMobile) {
+      const sobreTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '.sobre-scene',
+          start: 'top top',
+          end: '+=80%',
+          pin: '.sobre-pin',
+          scrub: 1.2,
+        }
+      });
 
-    if (checkMobile) {
-      // Simple fade-in of text column elements on mobile to prevent GPU composition overhead
-      sobreTl.fromTo('.sobre-left', {
-        opacity: 0,
-      }, {
-        opacity: 1,
-        ease: 'power3.out',
-      }, 0)
-      .fromTo('.sobre-right', {
-        opacity: 0,
-      }, {
-        opacity: 1,
-        ease: 'power3.out',
-      }, 0);
-    } else {
       sobreTl.fromTo('.sobre-left', {
         xPercent: -30,
         opacity: 0,
@@ -168,40 +145,34 @@ export default function Home() {
         stagger: 0.08,
         ease: 'power3.out',
       }, 0.35);
+    } else {
+      // Mobile version: Simple entrance fade-in only, no movement/translations, play once, no scrub
+      gsap.fromTo(['.sobre-left', '.sobre-right'], {
+        opacity: 0,
+      }, {
+        opacity: 1,
+        duration: 0.6,
+        ease: 'power1.out',
+        scrollTrigger: {
+          trigger: '.sobre-scene',
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        }
+      });
     }
 
     // 4. Billboard Swipe Scene (Scene 5)
-    const billboardTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '.billboard-scene',
-        start: 'top top',
-        end: checkMobile ? '+=30%' : '+=50%',
-        pin: '.billboard-pin',
-        scrub: 1.2,
-      }
-    });
+    if (!checkMobile) {
+      const billboardTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '.billboard-scene',
+          start: 'top top',
+          end: '+=50%',
+          pin: '.billboard-pin',
+          scrub: 1.2,
+        }
+      });
 
-    if (checkMobile) {
-      // Skip text scaling on mobile to avoid layout recalculations on every tick
-      billboardTl.fromTo('.billboard-swipe-bg', {
-        yPercent: 100,
-        opacity: 1,
-      }, {
-        yPercent: 0,
-        duration: 0.5,
-        ease: 'power3.inOut',
-      }, 0)
-      .to('.billboard-title', {
-        color: '#05060A',
-        duration: 0.4,
-        ease: 'power2.out',
-      }, 0.2)
-      .to('.billboard-tag', {
-        color: '#2563EB',
-        duration: 0.4,
-        ease: 'power2.out',
-      }, 0.2);
-    } else {
       billboardTl.fromTo('.billboard-swipe-bg', {
         yPercent: 100,
         opacity: 1,
@@ -221,68 +192,69 @@ export default function Home() {
         duration: 0.4,
         ease: 'power2.out',
       }, 0.2);
+    } else {
+      // Mobile version: Simple entrance fade-in only, no swipe or background changes
+      gsap.fromTo('.billboard-title', {
+        opacity: 0,
+      }, {
+        opacity: 1,
+        duration: 0.6,
+        ease: 'power1.out',
+        scrollTrigger: {
+          trigger: '.billboard-scene',
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        }
+      });
     }
 
     // 5. Services Card Non-Scrubbed Staggered Entrance (Bug 4)
-    gsap.fromTo('.services-card-wrap', {
-      y: 45,
-      opacity: 0,
-    }, {
-      y: 0,
-      opacity: 1,
-      stagger: 0.08,
-      duration: 0.6,
-      ease: 'back.out(1.2)',
-      scrollTrigger: {
-        trigger: '.services-scene',
-        start: 'top 70%',
-        toggleActions: 'play none none none',
-      }
-    });
-
-    // 6. Poster Reveal Scene (Scene 8)
-    const posterTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '.poster-scene',
-        start: 'top top',
-        end: checkMobile ? '+=60%' : '+=160%',
-        pin: '.poster-pin',
-        scrub: 1.2,
-        anticipatePin: 1,
-      }
-    });
-
     if (checkMobile) {
-      // Simplified mobile timeline: enter/exit in block groups, no single-element staggers
-      posterTl.fromTo('.poster-swipe-bg', {
-        yPercent: 100,
-        opacity: 1,
-      }, {
-        yPercent: 0,
-        duration: 0.35,
-        ease: 'power3.inOut',
-      })
-      .fromTo('.poster-content > *', {
+      // Mobile version: simple entrance fade-in only, no movement/scale translations
+      gsap.fromTo('.services-card-wrap', {
         opacity: 0,
       }, {
         opacity: 1,
-        duration: 0.35,
-        ease: 'power3.out',
-      }, 0.35)
-      .to({}, { duration: 0.4 })
-      .to('.poster-content > *', {
-        opacity: 0,
-        duration: 0.3,
-        ease: 'power2.in',
-      }, 1.1)
-      .to('.poster-swipe-bg', {
-        yPercent: -100,
-        opacity: 0,
-        duration: 0.3,
-        ease: 'power3.inOut',
-      }, 1.3)
-      .to({}, { duration: 0.15 });
+        stagger: 0.05,
+        duration: 0.5,
+        ease: 'power1.out',
+        scrollTrigger: {
+          trigger: '.services-scene',
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        }
+      });
     } else {
+      gsap.fromTo('.services-card-wrap', {
+        y: 45,
+        opacity: 0,
+      }, {
+        y: 0,
+        opacity: 1,
+        stagger: 0.08,
+        duration: 0.6,
+        ease: 'back.out(1.2)',
+        scrollTrigger: {
+          trigger: '.services-scene',
+          start: 'top 70%',
+          toggleActions: 'play none none none',
+        }
+      });
+    }
+
+    // 6. Poster Reveal Scene (Scene 8) - Desktop only
+    if (!checkMobile) {
+      const posterTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '.poster-scene',
+          start: 'top top',
+          end: '+=160%',
+          pin: '.poster-pin',
+          scrub: 1.2,
+          anticipatePin: 1,
+        }
+      });
+
       // ESTÁGIO 1 — Entrada: deslizar o fundo branco de baixo para cima
       posterTl.fromTo('.poster-swipe-bg', {
         yPercent: 100,
@@ -401,15 +373,15 @@ export default function Home() {
       <main className="flex-1 flex flex-col">
         
         {/* Cena 2, 3, 4: Hero, Ticker Tape and background zoom */}
-        <section className="scene hero-scene" style={{ height: isMobile ? '120vh' : '180vh' }}>
-          <div className="scene__pin hero-pin">
+        <section className="scene hero-scene" style={{ height: isMobile ? 'auto' : '180vh' }}>
+          <div className={isMobile ? 'w-full' : 'scene__pin hero-pin'}>
             <Hero heroMediaVariant="sideShowcase" />
           </div>
         </section>
 
         {/* Cena 4 (continuation): Pinned About panel (Bug 1 & Bug 3) */}
-        <section className="scene sobre-scene" style={{ height: isMobile ? '120vh' : '180vh' }}>
-          <div className="scene__pin sobre-pin flex flex-col justify-center bg-[#05060A]/85 backdrop-blur-xl">
+        <section className="scene sobre-scene" style={{ height: isMobile ? 'auto' : '180vh' }}>
+          <div className={isMobile ? 'w-full flex flex-col justify-center bg-[#05060A]/85 backdrop-blur-xl' : 'scene__pin sobre-pin flex flex-col justify-center bg-[#05060A]/85 backdrop-blur-xl'}>
             <div className="sobre-container">
               <Sobre />
             </div>
@@ -420,13 +392,16 @@ export default function Home() {
         <Stats />
 
         {/* Cena 5: Full-bleed billboard curtain swipe (Bug 2) */}
-        <section className="scene billboard-scene" style={{ height: isMobile ? '100vh' : '150vh' }}>
-          <div className="scene__pin billboard-pin flex items-center justify-center bg-transparent relative overflow-hidden">
-            {/* Dark background layer */}
-            <div className="absolute inset-0 bg-[#05060A] z-0" />
+        <section className="scene billboard-scene" style={{ height: isMobile ? '80vh' : '150vh' }}>
+          <div className={isMobile ? 'w-full h-full flex items-center justify-center bg-transparent relative overflow-hidden' : 'scene__pin billboard-pin flex items-center justify-center bg-transparent relative overflow-hidden'}>
+            {/* Dark background layer with slow CSS zoom animation on mobile */}
+            <div className={`absolute inset-0 bg-[#05060A] z-0 overflow-hidden ${isMobile ? 'animate-subtle-zoom' : ''}`}>
+              {/* Very subtle grid so the zoom is visual on mobile */}
+              {isMobile && <div className="absolute inset-0 infinite-grid opacity-25" />}
+            </div>
             
             {/* White curtain slider (Request 2) */}
-            <div className="billboard-swipe-bg absolute inset-0 bg-[#F5F6FA] z-10" />
+            {!isMobile && <div className="billboard-swipe-bg absolute inset-0 bg-[#F5F6FA] z-10" />}
             
             <div className="relative z-20 text-center px-6">
               <span className="billboard-tag text-xs font-bold text-accent-purple tracking-widest uppercase block mb-4">
@@ -461,37 +436,39 @@ export default function Home() {
         <FAQ />
 
         {/* Cena 8: Symmetrical Final Poster Reveal (Bug 3) */}
-        <section className="scene poster-scene bg-[#05060A]" style={{ height: isMobile ? '120vh' : '180vh' }}>
-          <div className="w-full h-screen overflow-hidden poster-pin flex flex-col items-center justify-center bg-transparent relative text-center">
-            {/* Dark background layer */}
-            <div className="absolute inset-0 bg-[#05060A] z-0" />
+        {!isMobile && (
+          <section className="scene poster-scene bg-[#05060A]" style={{ height: isMobile ? '120vh' : '180vh' }}>
+            <div className="w-full h-screen overflow-hidden poster-pin flex flex-col items-center justify-center bg-transparent relative text-center">
+              {/* Dark background layer */}
+              <div className="absolute inset-0 bg-[#05060A] z-0" />
 
-            {/* White curtain slider */}
-            <div className="poster-swipe-bg absolute inset-0 bg-white pointer-events-none z-10" />
+              {/* White curtain slider */}
+              <div className="poster-swipe-bg absolute inset-0 bg-white pointer-events-none z-10" />
 
-            <div className="poster-circle-bg absolute w-[600px] h-[600px] border border-dashed border-black/5 rounded-full animate-spin-slow pointer-events-none z-20 opacity-0 hidden md:block" />
-            
-            <div className="poster-glow-bg absolute w-[50vw] h-[50vw] rounded-full bg-accent-blue/10 blur-[120px] pointer-events-none z-20 opacity-0 hidden md:block" />
+              <div className="poster-circle-bg absolute w-[600px] h-[600px] border border-dashed border-black/5 rounded-full animate-spin-slow pointer-events-none z-20 opacity-0 hidden md:block" />
+              
+              <div className="poster-glow-bg absolute w-[50vw] h-[50vw] rounded-full bg-accent-blue/10 blur-[120px] pointer-events-none z-20 opacity-0 hidden md:block" />
 
-            <div className="poster-content relative z-30 max-w-3xl px-6 flex flex-col items-center select-none">
-              <span className="text-xs font-bold text-accent-purple tracking-widest uppercase mb-4 opacity-0 block">
-                Y&M SYSTEMS
-              </span>
-              <h2 className="text-4xl sm:text-7xl font-black tracking-tight text-[#05060A] uppercase leading-none font-sans mb-8 opacity-0">
-                INNOVATION<br />FOR THE FUTURE
-              </h2>
-              <p className="text-sm sm:text-base text-gray-600 max-w-md mb-8 leading-relaxed font-medium opacity-0">
-                Arquitetura sólida, segurança certificada e interfaces premium de alto impacto comercial.
-              </p>
-              <a
-                href="#contato"
-                className="poster-button px-8 py-3.5 rounded-full text-xs font-mono font-bold tracking-widest text-white bg-gradient-primary hover:shadow-[0_0_25px_rgba(139,92,246,0.4)] transition-all duration-200 transform hover:scale-[1.05] opacity-0 inline-block"
-              >
-                INICIAR PROJETO
-              </a>
+              <div className="poster-content relative z-30 max-w-3xl px-6 flex flex-col items-center select-none">
+                <span className="text-xs font-bold text-accent-purple tracking-widest uppercase mb-4 opacity-0 block">
+                  Y&M SYSTEMS
+                </span>
+                <h2 className="text-4xl sm:text-7xl font-black tracking-tight text-[#05060A] uppercase leading-none font-sans mb-8 opacity-0">
+                  INNOVATION<br />FOR THE FUTURE
+                </h2>
+                <p className="text-sm sm:text-base text-gray-600 max-w-md mb-8 leading-relaxed font-medium opacity-0">
+                  Arquitetura sólida, segurança certificada e interfaces premium de alto impacto comercial.
+                </p>
+                <a
+                  href="#contato"
+                  className="poster-button px-8 py-3.5 rounded-full text-xs font-mono font-bold tracking-widest text-white bg-gradient-primary hover:shadow-[0_0_25px_rgba(139,92,246,0.4)] transition-all duration-200 transform hover:scale-[1.05] opacity-0 inline-block"
+                >
+                  INICIAR PROJETO
+                </a>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
        
         {/* Contact request form section */}
         <Contato />

@@ -1,11 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Mail, Phone, MapPin, Send, Check } from "lucide-react";
-import { fadeInUp, staggerContainer, easeCustom } from "../../lib/motion";
+import { fadeIn, fadeInUp, staggerContainer, easeCustom } from "../../lib/motion";
 
 export default function Contato() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.matchMedia('(max-width: 1024px)').matches);
+  }, []);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -62,21 +68,21 @@ export default function Contato() {
             className="flex flex-col text-left"
           >
             <motion.span
-              variants={fadeInUp(20, 0.5)}
+              variants={isMobile ? fadeIn(0.5) : fadeInUp(20, 0.5)}
               className="text-xs font-bold text-accent-blue tracking-widest uppercase mb-4"
             >
               Vamos conversar
             </motion.span>
 
             <motion.h2
-              variants={fadeInUp(20, 0.5)}
+              variants={isMobile ? fadeIn(0.5) : fadeInUp(20, 0.5)}
               className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-text-primary tracking-tight leading-[1.12] mb-6 font-sans"
             >
               Pronto para construir o seu próximo sistema?
             </motion.h2>
 
             <motion.p
-              variants={fadeInUp(20, 0.5)}
+              variants={isMobile ? fadeIn(0.5) : fadeInUp(20, 0.5)}
               className="text-sm sm:text-base text-text-secondary leading-relaxed mb-10 max-w-md font-medium"
             >
               Fale diretamente com nossa equipe de engenharia. Analisamos sua
@@ -104,7 +110,7 @@ export default function Contato() {
               ].map((item, index) => (
                 <motion.div
                   key={index}
-                  variants={fadeInUp(20, 0.5, index * 0.1)}
+                  variants={isMobile ? fadeIn(0.5, index * 0.1) : fadeInUp(20, 0.5, index * 0.1)}
                   className="flex items-center gap-4"
                 >
                   <div className="w-10 h-10 rounded-xl bg-white/[0.02] border border-white/10 flex items-center justify-center text-accent-blue">
@@ -124,10 +130,10 @@ export default function Contato() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, filter: "blur(8px)" }}
-            whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+            initial={isMobile ? { opacity: 0 } : { opacity: 0, scale: 0.95, filter: "blur(8px)" }}
+            whileInView={isMobile ? { opacity: 1 } : { opacity: 1, scale: 1, filter: "blur(0px)" }}
             viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.8, ease: easeCustom }}
+            transition={isMobile ? { duration: 0.5, ease: "easeOut" } : { duration: 0.8, ease: easeCustom }}
             className="w-full max-w-[540px] mx-auto relative"
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-accent-blue/10 to-accent-purple/10 rounded-3xl blur-[40px] opacity-70 pointer-events-none" />
